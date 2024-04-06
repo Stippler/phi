@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import Hero from '@/components/hero';
+import FileButton from '@/components/fileButton';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -10,18 +11,14 @@ export default function Home() {
       <Hero />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-4xl font-bold text-center mb-6">A Scrolling Page with Lots of Text</h1>
-        
+
         {/* Example of a section with text */}
         <section>
-          <h2 className="text-3xl font-semibold mb-4">Section Title</h2>
+          <h2 className="text-3xl font-semibold mb-4">Upload File</h2>
           <p className="mb-3">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum. 
-            Donec in efficitur ipsum, et porta sapien. Duis accumsan dolor sed neque consectetur lobortis. 
-            Nulla vitae elit libero, a pharetra augue. Vestibulum in felis nec nisl fermentum venenatis eu eget metus. 
-            Etiam sit amet orci eget eros faucibus tincidunt. Duis leo sapien, vehicula at venenatis eu, dapibus a neque. 
-            Nullam quis risus eget urna mollis ornare vel eu leo.
+            Here you can upload files.
           </p>
-          {/* Repeat this block as needed to create more text content */}
+          <FileButton text="Upload File" />
         </section>
 
         {/* ... More content sections ... */}
