@@ -1,5 +1,4 @@
 import React from 'react';
-import Card from './Card'; // Adjust import as necessary
 
 function Hero({ nextSectionRef }) {
     const handleClick = () => {
