@@ -8,6 +8,18 @@ function TaskList() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
 
+    const updateTask = useTaskStore((state) => state.updateTask);
+
+    const onSubmit = (data) => {
+        const updateData = {
+            ...task,
+            ...data
+        }
+        console.log(updateData);
+        updateTask(updateData);
+        onClose();
+    };
+
     const openModal = (task) => {
         setSelectedTask(task);
         setIsModalOpen(true);
@@ -50,7 +62,7 @@ function TaskList() {
             <hr className="my-4" />
 
             {isModalOpen && (
-                <EditTaskModal task={selectedTask} onClose={() => setIsModalOpen(false)} />
+                <EditTaskModal task={selectedTask} onSubmit={onSubmit} onClose={() => setIsModalOpen(false)} />
             )}
         </div>
     );

@@ -10,22 +10,10 @@ const activityOptions = [
     "drink", "meeting", "party", "walking"
 ]
 
-const EditTaskModal = ({ task, onClose }) => {
+const EditTaskModal = ({ task, onSubmit, onClose }) => {
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: task
     });
-
-    const updateTask = useTaskStore((state) => state.updateTask);
-
-    const onSubmit = (data) => {
-        const updateData = {
-            ...task,
-            ...data
-        }
-        console.log(updateData);
-        updateTask(updateData);
-        onClose();
-    };
 
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
