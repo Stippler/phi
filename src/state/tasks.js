@@ -42,8 +42,15 @@ const initialTasks = [
     // Add more initial tasks as needed
 ];
 
-const useTaskStore = create((set) => ({
-    messages: [],
+const useTaskStore = create((set, get) => ({
+    messages: [
+        'Hey, can you please add a team meeting task at 9:00 AM on 8th April 2024?',
+        'Yes! Here is the task details: Team Meeting at 9:00 AM on 8th April 2024. Discuss project updates.',
+        'Hey, can you please add a team meeting task at 9:00 AM on 8th April 2024?',
+        'Yes! Here is the task details: Team Meeting at 9:00 AM on 8th April 2024. Discuss project updates.',
+        'Hey, can you please add a team meeting task at 9:00 AM on 8th April 2024?',
+        'Yes! Here is the task details: Team Meeting at 9:00 AM on 8th April 2024. Discuss project updates.',
+    ],
     loading: false,
     tasks: initialTasks,
     currentTask: null,
@@ -64,24 +71,25 @@ const useTaskStore = create((set) => ({
         }));
     },
     sendMessage: async (message) => {
-        // Perform asynchronous operations here (e.g., fetch)
-        // Modify state based on the result of the asynchronous operation
         set(produce((state) => {
             state.messages.push(message);
             state.loading = true;
         }));
-
         try {
-            const response = await fetch(`${backendUrl}/text_list`, {
+            const response = await fetch(`${backendUrl}/text`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    'messages': messages,
-                    'task': state.currentTask
+                    'messages': get().messages,
+                    'task': get().currentTask
                 })
             });
+            if (!response.ok) {
+                const errorData = await response.json(); // Get the error details from response
+                throw new Error(`HTTP error ${response.status}: ${errorData.message}`); // Throw an error to be caught
+            }
             const data = await response.json();
             /*
                 data => 
@@ -92,20 +100,22 @@ const useTaskStore = create((set) => ({
                 }
             */
             set(produce((state) => {
-                state.loading = false;
                 state.messages.push(data.message);
-                if(success) {
+                if(data.success) {
                     state.tasks.push(data.task);
                     state.currentTask = null;
                 } else{
                     state.currentTask = data.task;
                 }
+                state.loading = false;
             }));
         } catch (error) {
             console.error(error);
+            console.log('catch was called')
             set(produce((state) => {
-                state.loading = false;
+                console.log(state.messages);
                 state.messages.push('An error occurred while sending the message, please try again later.');
+                state.loading = false;
             }));
         }
     },

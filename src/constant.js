@@ -14,7 +14,7 @@ export const getBaseUrl = () => {
 export let backendUrl;
 switch (process.env.NODE_ENV) {
     case 'production':
-        backendUrl = '';
+        backendUrl = 'https://pompoko.ngrok.app';
         break;
     case 'development':
     default:
