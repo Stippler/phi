@@ -1,12 +1,31 @@
+import useTaskStore from '@/state/tasks';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
 function TaskForm() {
     const { register, handleSubmit, formState: { errors } } = useForm();
 
+    const addTask = useTaskStore((state) => state.addTask);
+
     const onSubmit = data => {
         console.log(data);
         // Here you would typically send data to the backend
+
+        const newTask = {
+            title: "Lunch Break",
+            date: "2024-04-08",
+            from: "13:00",
+            to: "13:30",
+            activity: "Lunch",
+            description: "Quick lunch break",
+            location: "Outside",
+            latitude: "48.8566",
+            longitude: "2.3522"
+        };
+
+        addTask(newTask);
+
+
     };
 
     const getTodayString = () => {
@@ -39,19 +58,19 @@ function TaskForm() {
                     <div>
                         <label htmlFor="date" className="block text-gray-700 text-sm font-bold mb-2">Date</label>
                         <input type="date" id="date" defaultValue={getTodayString()} {...register("date", { required: true })}
-                               className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                         {errors.date && <span className="text-red-500 text-xs italic">Date is required.</span>}
                     </div>
                     <div>
                         <label htmlFor="timeFrom" className="block text-gray-700 text-sm font-bold mb-2">From (Time)</label>
                         <input type="time" id="timeFrom" {...register("timeFrom", { required: true })}
-                               className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                         {errors.timeFrom && <span className="text-red-500 text-xs italic">From time is required.</span>}
                     </div>
                     <div>
                         <label htmlFor="timeTo" className="block text-gray-700 text-sm font-bold mb-2">To (Time)</label>
                         <input type="time" id="timeTo" {...register("timeTo", { required: true })}
-                               className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                         {errors.timeTo && <span className="text-red-500 text-xs italic">To time is required.</span>}
                     </div>
                 </div>
@@ -81,7 +100,7 @@ function TaskForm() {
                 {/* Submit Button */}
                 <button type="submit"
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Submit
+                    Add
                 </button>
             </form>
         </div>
