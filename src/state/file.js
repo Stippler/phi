@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { produce } from 'immer';
 
-const fileManagerStore = create((set) => ({
+const useFileManagerStore = create((set) => ({
     files: [],
     addFile: (file) =>
         set((state) =>
@@ -17,4 +17,4 @@ const fileManagerStore = create((set) => ({
         ),
 }));
 
-export default fileManagerStore;
+export default useFileManagerStore;
