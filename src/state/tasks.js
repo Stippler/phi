@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { produce } from 'immer';
+import { backendUrl } from '../constant';
 
 const initialTasks = [
     {
@@ -42,7 +43,10 @@ const initialTasks = [
 ];
 
 const useTaskStore = create((set) => ({
+    messages: [],
+    loading: false,
     tasks: initialTasks,
+    currentTask: null,
     addTask: (task) => {
         set(produce((state) => {
             state.tasks.push(task);
@@ -58,6 +62,58 @@ const useTaskStore = create((set) => ({
                 state.tasks[taskIndex] = updatedTask;
             }
         }));
+    },
+    sendMessage: async (message) => {
+        // Perform asynchronous operations here (e.g., fetch)
+        // Modify state based on the result of the asynchronous operation
+        set(produce((state) => {
+            state.messages.push(message);
+            state.loading = true;
+        }));
+
+        try {
+            const response = await fetch(`${backendUrl}/text_list`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'messages': messages,
+                    'task': state.currentTask
+                })
+            });
+            const data = await response.json();
+            /*
+                data => 
+                {
+                    'success': true,
+                    'task': {...},
+                    'message': 'Tasks added successfully, please check if you see them in the list.'
+                }
+            */
+            set(produce((state) => {
+                state.loading = false;
+                state.messages.push(data.message);
+                if(success) {
+                    state.tasks.push(data.task);
+                    state.currentTask = null;
+                } else{
+                    state.currentTask = data.task;
+                }
+            }));
+        } catch (error) {
+            console.error(error);
+            set(produce((state) => {
+                state.loading = false;
+                state.messages.push('An error occurred while sending the message, please try again later.');
+            }));
+        }
+    },
+    setTasks: (tasks) => {
+        set(produce((state) => {
+            state.tasks = tasks;
+        }
+        ));
     }
 }));
 

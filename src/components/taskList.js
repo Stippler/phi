@@ -31,7 +31,7 @@ function TaskList() {
             <hr className="my-4" />
             <div>
                 {tasks.map((task, index) => (
-                    <div key={task.id} className="mb-4">
+                    <div key={task.taskId} className="mb-4">
                         <button
                             className="flex items-center relative w-full text-left transition duration-500 ease-in-out transform"
                             onClick={() => openModal(task)}

@@ -18,7 +18,6 @@ export default function Home() {
           </Card>
           <Card>
             <TaskList />
-            {/* <TaskForm /> */}
           </Card>
         </div>
       </div>
