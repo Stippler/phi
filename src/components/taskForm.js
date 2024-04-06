@@ -1,6 +1,12 @@
 import useTaskStore from '@/state/tasks';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import StyledButton from './button';
+
+const activityOptions = [
+    "coffee", "eat", "other", "running", "working",
+    "drink", "meeting", "party", "walking"
+]
 
 function TaskForm() {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -98,10 +104,7 @@ function TaskForm() {
                 </div>
 
                 {/* Submit Button */}
-                <button type="submit"
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Add
-                </button>
+                <StyledButton type="submit">Add</StyledButton>
             </form>
         </div>
     );

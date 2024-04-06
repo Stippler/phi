@@ -11,11 +11,13 @@ export default function Home() {
   return (
     <main className="font-inter text-gray-700">
       <Hero nextSectionRef={nextSectionRef} />
-      <div ref={nextSectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Card>
-          <TaskList />
-          <TaskForm />
-        </Card>
+      <div ref={nextSectionRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 gap-4 md:grid-cols-2">
+        <div className="flex justify-center items-center">
+          <Card>
+            <TaskList />
+            <TaskForm />
+          </Card>
+        </div>
       </div>
     </main>
   );
