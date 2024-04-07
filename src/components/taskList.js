@@ -5,10 +5,11 @@ import EditTaskModal from './editTask'; // Adjust the path accordingly
 
 function TaskList() {
     const tasks = useTaskStore((state) => state.tasks);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
 
     const updateTask = useTaskStore((state) => state.updateTask);
+    const reloadTask = useTaskStore((state) => state.reloadTask);
 
     const onSubmit = (data) => {
         const updateData = {
@@ -16,12 +17,17 @@ function TaskList() {
         }
         console.log(updateData);
         updateTask(updateData);
-        setIsModalOpen(false);
+        setModalOpen(false);
+    };
+
+    const onReload = (task) => {
+        console.log(task)
+        reloadTask(task);
     };
 
     const openModal = (task) => {
         setSelectedTask(task);
-        setIsModalOpen(true);
+        setModalOpen(true);
     };
 
     return (
@@ -30,7 +36,7 @@ function TaskList() {
             <hr className="my-4" />
             <div>
                 {tasks.map((task, index) => (
-                    <div key={task.taskId} className="mb-4">
+                    <div key={task.taskId} className="mb-4 flex gap-4">
                         <button
                             className="flex items-center relative w-full text-left transition duration-500 ease-in-out transform"
                             onClick={() => openModal(task)}
@@ -53,15 +59,30 @@ function TaskList() {
                                 <p className="text-sm"><strong>Activity:</strong> {task.activity}</p>
                                 <p className="text-sm">{task.description}</p>
                             </div>
+
+
                         </button>
+                        {/* Loading Element */}
+                        {task.state == 'loading' && (
+                            <button onClick={()=>{onReload(task)}}>
+                                <div className="flex items-center justify-center">
+                                    <p className="text-sm text-gray-500">Loading...</p>
+                                </div>
+                            </button>
+                        )}
+                        {task.state == 'ok' && (
+                            <button onClick={()=>{onReload(task)}}>
+                                <ActivityIcon activity="ok" />
+                            </button>
+                        )}
                         {index !== tasks.length - 1 && <hr className="my-4" />}
                     </div>
                 ))}
             </div>
             <hr className="my-4" />
 
-            {isModalOpen && (
-                <EditTaskModal task={selectedTask} onSubmit={onSubmit} onClose={() => setIsModalOpen(false)} />
+            {modalOpen && (
+                <EditTaskModal task={selectedTask} onSubmit={onSubmit} onClose={() => setModalOpen(false)} />
             )}
         </div>
     );

@@ -3,14 +3,60 @@ import { produce } from 'immer';
 import { backendUrl } from '../constant';
 
 const initialTasks = [
+    {
+        "activity": "running",
+        "date": "2024-04-08",
+        "description": "Run in Prater in Vienna",
+        "endTime": "12:00",
+        "latitude": 48.2156,
+        "longitude": 16.3878,
+        "reason": null,
+        "sheltered": false,
+        "startTime": "08:00",
+        "state": "loading",
+        "taskId": 0,
+        "title": "Morning Run in Prater",
+    }
 ];
 
 const useTaskStore = create((set, get) => ({
-    messages: [
-    ],
+    messages: [],
     loading: false,
     tasks: initialTasks,
     currentTask: null,
+    reloadTask: async (updateTask) => {
+        set(produce((state) => {
+            console.log(updateTask);
+            console.log(state.tasks);
+            const task = state.tasks.find(task => task.taskId === updateTask.taskId);
+            task.state = 'loading';
+        }));
+        try {
+            const response = await fetch(`${backendUrl}/weather`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(task)
+            });
+            console.log(response);
+            const data = await response.json();
+            console.log(data);
+            set(produce((state) => {
+                const taskIndex = state.tasks.findIndex(t => t.taskId === task.taskId);
+                console.log(taskIndex);
+                if (data.suitable) {
+                    state.tasks[taskIndex].state = 'ok';
+                    state.tasks[taskIndex].reason = data.message;
+                } else {
+                    state.tasks[taskIndex].state = 'error';
+                    state.tasks[taskIndex].reason = data.message;
+                }
+            }));
+        } catch (error) {
+            console.error(error);
+        }
+    },
     addTask: (task) => {
         set(produce((state) => {
             state.tasks.push(task);
@@ -25,6 +71,11 @@ const useTaskStore = create((set, get) => ({
             if (taskIndex !== -1) {
                 state.tasks[taskIndex] = updatedTask;
             }
+        }));
+    },
+    checkTask: (task) => {
+        set(produce((state) => {
+
         }));
     },
     sendMessage: async (message) => {
@@ -64,6 +115,9 @@ const useTaskStore = create((set, get) => ({
                 state.messages.push(data.message);
                 if (data.success) {
                     data.task.taskId = state.tasks.length;
+                    data.task.state = 'loading';
+                    data.task.reason = null;
+                    console.log(data.task);
                     state.tasks.push(data.task);
                     state.currentTask = null;
                 } else {
