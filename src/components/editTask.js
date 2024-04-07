@@ -1,8 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import useTaskStore from '../state/tasks'; // Adjust the path accordingly
 import StyledButton from './button'; // Ensure this path is correct
-import ActivityIcon from './activity';
 
 
 const activityOptions = [

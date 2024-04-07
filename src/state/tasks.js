@@ -25,10 +25,12 @@ const useTaskStore = create((set, get) => ({
     tasks: initialTasks,
     currentTask: null,
     reloadTask: async (updateTask) => {
+        const task = get().tasks.find(task => task.taskId === updateTask.taskId);
+        // const task = state.tasks.find(task => task.taskId === updateTask.taskId);
         set(produce((state) => {
             console.log(updateTask);
             console.log(state.tasks);
-            const task = state.tasks.find(task => task.taskId === updateTask.taskId);
+            console.log(updateTask);
             task.state = 'loading';
         }));
         try {
@@ -47,10 +49,10 @@ const useTaskStore = create((set, get) => ({
                 console.log(taskIndex);
                 if (data.suitable) {
                     state.tasks[taskIndex].state = 'ok';
-                    state.tasks[taskIndex].reason = data.message;
+                    state.tasks[taskIndex].reason = data.reason;
                 } else {
                     state.tasks[taskIndex].state = 'error';
-                    state.tasks[taskIndex].reason = data.message;
+                    state.tasks[taskIndex].reason = data.reason;
                 }
             }));
         } catch (error) {

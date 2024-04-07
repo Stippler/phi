@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import useTaskStore from '../state/tasks'; // Adjust the path accordingly
 import ActivityIcon from './activity';
 import EditTaskModal from './editTask'; // Adjust the path accordingly
+import TaskDetailsModal from './taskDetail';
+import { set } from 'react-hook-form';
 
 function TaskList() {
     const tasks = useTaskStore((state) => state.tasks);
     const [modalOpen, setModalOpen] = useState(false);
+    const [taskDetailOpen, setTaskDetailOpen] = useState(null);
+    const [taskDetail, setTaskDetail] = useState(null);
     const [selectedTask, setSelectedTask] = useState(null);
 
     const updateTask = useTaskStore((state) => state.updateTask);
@@ -29,6 +33,21 @@ function TaskList() {
         setSelectedTask(task);
         setModalOpen(true);
     };
+
+    const onCloseModal = () => {  
+        setSelectedTask(null);
+        setModalOpen(false);
+    }
+
+    const onOpenDetail = (task) => {
+        setTaskDetail(task);
+        setTaskDetailOpen(true);
+    }
+
+    const onCloseDetail = () => {
+        setTaskDetailOpen(false);
+        setTaskDetail(null);
+    }
 
     return (
         <div className="container mx-auto">
@@ -56,7 +75,6 @@ function TaskList() {
                                 <div className="flex items-center text-sm">
                                     <p>{task.date} {task.startTime}-{task.endTime}</p>
                                 </div>
-                                <p className="text-sm"><strong>Activity:</strong> {task.activity}</p>
                                 <p className="text-sm">{task.description}</p>
                             </div>
 
@@ -71,7 +89,12 @@ function TaskList() {
                             </button>
                         )}
                         {task.state == 'ok' && (
-                            <button onClick={()=>{onReload(task)}}>
+                            <button onClick={()=>{onOpenDetail(task)}}>
+                                <ActivityIcon activity="ok" />
+                            </button>
+                        )}
+                        {task.state == 'error' && (
+                            <button onClick={()=>{onOpenDetail(task)}}>
                                 <ActivityIcon activity="ok" />
                             </button>
                         )}
@@ -82,7 +105,10 @@ function TaskList() {
             <hr className="my-4" />
 
             {modalOpen && (
-                <EditTaskModal task={selectedTask} onSubmit={onSubmit} onClose={() => setModalOpen(false)} />
+                <EditTaskModal task={selectedTask} onSubmit={onSubmit} onClose={onCloseModal} />
+            )}
+            {taskDetailOpen && (
+                <TaskDetailsModal task={taskDetail} onClose={onCloseDetail} />
             )}
         </div>
     );
