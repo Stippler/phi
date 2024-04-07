@@ -34,7 +34,7 @@ function TaskList() {
         setModalOpen(true);
     };
 
-    const onCloseModal = () => {  
+    const onCloseModal = () => {
         setSelectedTask(null);
         setModalOpen(false);
     }
@@ -55,8 +55,9 @@ function TaskList() {
             <hr className="my-4" />
             <div>
                 {tasks.map((task, index) => (
-                    <div key={task.taskId} className="mb-4 flex gap-4 justify-between">
+                    <div key={task.taskId} className="mb-4 flex gap-2 justify-between">
                         <button
+                            style={{ width: "80%" }}
                             className="flex items-center relative w-full text-left transition duration-500 ease-in-out transform"
                             onClick={() => openModal(task)}
                         >
@@ -81,24 +82,25 @@ function TaskList() {
 
                         </button>
                         {/* Loading Element */}
-                        {task.state === 'loading' && (
-                            <button onClick={()=>{onReload(task)}}>
-                                <div className="flex items-center justify-center">
-                                    <p className="text-sm text-gray-500">Loading...</p>
-                                </div>
-                            </button>
-                        )}
-                        {task.state === 'ok' && (
-                            <button onClick={()=>{onOpenDetail(task)}}>
-                                <ActivityIcon activity="ok" />
-                            </button>
-                        )}
-                        {task.state === 'error' && (
-                            <button onClick={()=>{onOpenDetail(task)}}>
-                                <ActivityIcon activity="error" />
-                            </button>
-                        )}
-                        {index !== tasks.length - 1 && <hr className="my-4" />}
+                        <div style={{ width: "20%" }} className='flex justify-end items-center'>
+                            {task.state === 'loading' && (
+                                <button onClick={() => { onReload(task) }}>
+                                    <div className="flex items-center justify-center">
+                                        <p className="text-sm text-gray-500">Loading...</p>
+                                    </div>
+                                </button>
+                            )}
+                            {task.state === 'ok' && (
+                                <button onClick={() => { onOpenDetail(task) }}>
+                                    <ActivityIcon activity="ok" />
+                                </button>
+                            )}
+                            {task.state === 'error' && (
+                                <button onClick={() => { onOpenDetail(task) }}>
+                                    <ActivityIcon activity="error" />
+                                </button>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>

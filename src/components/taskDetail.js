@@ -6,10 +6,19 @@ import useTaskStore from '@/state/tasks';
 const TaskDetailsModal = ({ task, onClose }) => {
     if (!task) return null; // Return null if no task is passed
     const reloadTask = useTaskStore((state) => state.reloadTask);
+    const newTime = useTaskStore((state) => state.newTime);
 
     const onRefresh = () => {
         // Call the reloadTask function here
-        reloadTask(task);
+        console.log('reload called');
+        const copyTask = { ...task };
+        reloadTask(copyTask);
+        onClose();
+    }
+
+    const onUpdate = () => {
+        const copyTask = { ...task };
+        newTime(copyTask);
         onClose();
     }
 
@@ -44,7 +53,7 @@ const TaskDetailsModal = ({ task, onClose }) => {
                 {/* Close Button */}
                 <div className="mt-4 flex justify-between">
                     <StyledButton onClick={onRefresh}>Refresh</StyledButton>
-                    {task.status==='error' && <StyledButton onClick={onClose}>Refresh</StyledButton>}
+                    {task.state==='error' && <StyledButton onClick={onUpdate}>Update</StyledButton>}
                     <StyledButton onClick={onClose}>Close</StyledButton>
                 </div>
             </div>

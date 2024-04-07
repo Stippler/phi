@@ -3,7 +3,7 @@ import { produce } from 'immer';
 import { backendUrl } from '../constant';
 
 const initialTasks = [
-    {
+    /*{
         "activity": "running",
         "date": "2024-04-08",
         "description": "Run in Prater in Vienna",
@@ -16,7 +16,7 @@ const initialTasks = [
         "state": "loading",
         "taskId": 0,
         "title": "Morning Run in Prater",
-    }
+    }*/
 ];
 
 const useTaskStore = create((set, get) => ({
@@ -24,6 +24,38 @@ const useTaskStore = create((set, get) => ({
     loading: false,
     tasks: initialTasks,
     currentTask: null,
+    newTime: async (task) => {
+        set(produce((state) => {
+            const taskIndex = state.tasks.findIndex(t => t.taskId === task.taskId);
+            state.tasks[taskIndex].state = 'loading';
+        }));
+        try {
+            const response = await fetch(`${backendUrl}/new_time`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(task)
+            });
+            console.log(response);
+            const data = await response.json();
+            console.log(data);
+            set(produce((state) => {
+                const taskIndex = state.tasks.findIndex(t => t.taskId === task.taskId);
+                console.log(taskIndex);
+                if (data.suitable) {
+                    state.tasks[taskIndex].state = 'ok';
+                    state.tasks[taskIndex].reason = data.reason;
+                } else {
+                    state.tasks[taskIndex].state = 'error';
+                    state.tasks[taskIndex].reason = data.reason;
+                }
+                state.loading = false;
+            }));
+        } catch (error) {
+            console.error(error);
+        }
+    },
     reloadTask: async (updateTask) => {
         const task = get().tasks.find(task => task.taskId === updateTask.taskId);
         // const task = state.tasks.find(task => task.taskId === updateTask.taskId);
@@ -74,6 +106,7 @@ const useTaskStore = create((set, get) => ({
                 state.tasks[taskIndex] = updatedTask;
             }
         }));
+        get().reloadTask(updatedTask);
     },
     checkTask: (task) => {
         set(produce((state) => {
@@ -127,6 +160,7 @@ const useTaskStore = create((set, get) => ({
                 }
                 state.loading = false;
             }));
+            get().reloadTask(get().tasks[get().tasks.length - 1]);
         } catch (error) {
             console.error(error);
             set(produce((state) => {
