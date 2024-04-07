@@ -33,6 +33,8 @@ const useTaskStore = create((set, get) => ({
                     console.log('I am here')
                     state.tasks[taskIndex].state = 'ok';
                     state.tasks[taskIndex].reason = data.reason;
+                    state.tasks[taskIndex].startTime = data.startTime;
+                    state.tasks[taskIndex].endTime = data.endTime;
                 } else {
                     console.log('Sadly I am here')
                     state.tasks[taskIndex].state = 'error';
