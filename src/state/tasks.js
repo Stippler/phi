@@ -52,12 +52,13 @@ const useTaskStore = create((set, get) => ({
             }
         }));
         try {
+            const task = get().tasks.find(t => t.taskId === updateTask.taskId);;
             const response = await fetch(`${backendUrl}/weather`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(updatedTask)
+                body: JSON.stringify(task)
             });
             if (!response.ok) {
                 throw new Error(`HTTP error ${response.status}`);
@@ -137,7 +138,8 @@ const useTaskStore = create((set, get) => ({
                 }
                 state.loading = false;
             }));
-            get().reloadTask(get().tasks[state.tasks.length - 1]);
+            const state = get();
+            state.reloadTask(state.tasks[state.tasks.length - 1]);
         } catch (error) {
             console.error(error);
             set(produce((state) => {
