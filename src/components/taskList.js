@@ -55,7 +55,7 @@ function TaskList() {
             <hr className="my-4" />
             <div>
                 {tasks.map((task, index) => (
-                    <div key={task.taskId} className="mb-4 flex gap-4">
+                    <div key={task.taskId} className="mb-4 flex gap-4 justify-between">
                         <button
                             className="flex items-center relative w-full text-left transition duration-500 ease-in-out transform"
                             onClick={() => openModal(task)}
@@ -81,21 +81,21 @@ function TaskList() {
 
                         </button>
                         {/* Loading Element */}
-                        {task.state == 'loading' && (
+                        {task.state === 'loading' && (
                             <button onClick={()=>{onReload(task)}}>
                                 <div className="flex items-center justify-center">
                                     <p className="text-sm text-gray-500">Loading...</p>
                                 </div>
                             </button>
                         )}
-                        {task.state == 'ok' && (
+                        {task.state === 'ok' && (
                             <button onClick={()=>{onOpenDetail(task)}}>
                                 <ActivityIcon activity="ok" />
                             </button>
                         )}
-                        {task.state == 'error' && (
+                        {task.state === 'error' && (
                             <button onClick={()=>{onOpenDetail(task)}}>
-                                <ActivityIcon activity="ok" />
+                                <ActivityIcon activity="error" />
                             </button>
                         )}
                         {index !== tasks.length - 1 && <hr className="my-4" />}

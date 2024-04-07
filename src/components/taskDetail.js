@@ -36,7 +36,7 @@ const TaskDetailsModal = ({ task, onClose }) => {
 
                 {/* Displaying Task Information */}
                 <div className="space-y-2">
-                    {task.sheltered && <p>Inside, therefore is weather information irrelevant.</p>}
+                    {task.indoor && <p>Inside, therefore is weather information irrelevant.</p>}
                     <p><strong>Coordinates:</strong> {task.latitude}, {task.longitude}</p>
                     {task.reason && <p>{task.reason}</p>}
                 </div>

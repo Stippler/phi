@@ -11,7 +11,7 @@ const initialTasks = [
         "latitude": 48.2156,
         "longitude": 16.3878,
         "reason": null,
-        "sheltered": false,
+        "indoor": false,
         "startTime": "08:00",
         "state": "loading",
         "taskId": 0,

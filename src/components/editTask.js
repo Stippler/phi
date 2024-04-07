@@ -77,8 +77,8 @@ const EditTaskModal = ({ task, onSubmit, onClose }) => {
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Location</label>
                         <div className="flex items-center mb-2">
-                            <input id="sheltered" type="checkbox" {...register("sheltered")} className="form-checkbox h-5 w-5 text-gray-600" />
-                            <label htmlFor="sheltered" className="ml-2 text-gray-700">Sheltered</label>
+                            <input id="indoor" type="checkbox" {...register("indoor")} className="form-checkbox h-5 w-5 text-gray-600" />
+                            <label htmlFor="indoor" className="ml-2 text-gray-700">Indoor</label>
                         </div>
                     </div>
 
