@@ -73,7 +73,7 @@ const useTaskStore = create((set, get) => ({
                 if (data.suitable) {
                     state.tasks[taskIndex].state = 'ok';
                     state.tasks[taskIndex].reason = data.reason;
-                } else { 
+                } else {
                     state.tasks[taskIndex].state = 'error';
                     state.tasks[taskIndex].reason = data.reason;
                 }
@@ -138,8 +138,10 @@ const useTaskStore = create((set, get) => ({
                 }
                 state.loading = false;
             }));
-            const state = get();
-            state.reloadTask(state.tasks[state.tasks.length - 1]);
+            if (data.success) {
+                const state = get();
+                state.reloadTask(state.tasks[state.tasks.length - 1]);
+            }
         } catch (error) {
             console.error(error);
             set(produce((state) => {
