@@ -2,22 +2,7 @@ import { create } from 'zustand';
 import { produce } from 'immer';
 import { backendUrl } from '../constant';
 
-const initialTasks = [
-    /*{
-        "activity": "running",
-        "date": "2024-04-08",
-        "description": "Run in Prater in Vienna",
-        "endTime": "12:00",
-        "latitude": 48.2156,
-        "longitude": 16.3878,
-        "reason": null,
-        "indoor": false,
-        "startTime": "08:00",
-        "state": "loading",
-        "taskId": 0,
-        "title": "Morning Run in Prater",
-    }*/
-];
+const initialTasks = [];
 
 const useTaskStore = create((set, get) => ({
     messages: [],
@@ -60,10 +45,8 @@ const useTaskStore = create((set, get) => ({
         }
     },
     reloadTask: async (updateTask) => {
-        const task = get().tasks.find(task => task.taskId === updateTask.taskId);
-        // const task = state.tasks.find(task => task.taskId === updateTask.taskId);
         set(produce((draftState) => {
-            const task = draftState.tasks.find(t => t.id === updateTask.id);
+            const task = draftState.tasks.find(t => t.taskId === updateTask.taskId);
             if (task) {
                 task.state = 'loading';
             }
@@ -74,12 +57,14 @@ const useTaskStore = create((set, get) => ({
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(task)
+                body: JSON.stringify(updatedTask)
             });
-            console.log(response);
+            if (!response.ok) {
+                throw new Error(`HTTP error ${response.status}`);
+            }
+
             const data = await response.json();
-            console.log(data);
-            console.log(data.suitable)
+
             set(produce((state) => {
                 const taskIndex = state.tasks.findIndex(t => t.taskId === updateTask.taskId);
                 console.log(taskIndex);
@@ -113,11 +98,6 @@ const useTaskStore = create((set, get) => ({
         }));
         get().reloadTask(updatedTask);
     },
-    checkTask: (task) => {
-        set(produce((state) => {
-
-        }));
-    },
     sendMessage: async (message) => {
         set(produce((state) => {
             state.messages.push(message);
@@ -142,14 +122,6 @@ const useTaskStore = create((set, get) => ({
                 throw new Error(`HTTP error ${response.status}: ${errorData.message}`); // Throw an error to be caught
             }
             const data = await response.json();
-            /*
-                data => 
-                {
-                    'success': true,
-                    'task': {...},
-                    'message': 'Tasks added successfully, please check if you see them in the list.'
-                }
-            */
             console.log(data);
             set(produce((state) => {
                 state.messages.push(data.message);
@@ -165,7 +137,7 @@ const useTaskStore = create((set, get) => ({
                 }
                 state.loading = false;
             }));
-            get().reloadTask(get().tasks[get().tasks.length - 1]);
+            get().reloadTask(get().tasks[state.tasks.length - 1]);
         } catch (error) {
             console.error(error);
             set(produce((state) => {
