@@ -27,11 +27,11 @@ const useTaskStore = create((set, get) => ({
     reloadTask: async (updateTask) => {
         const task = get().tasks.find(task => task.taskId === updateTask.taskId);
         // const task = state.tasks.find(task => task.taskId === updateTask.taskId);
-        set(produce((state) => {
-            console.log(updateTask);
-            console.log(state.tasks);
-            console.log(updateTask);
-            task.state = 'loading';
+        set(produce((draftState) => {
+            const task = draftState.tasks.find(t => t.id === updateTask.id);
+            if (task) {
+                task.state = 'loading';
+            }
         }));
         try {
             const response = await fetch(`${backendUrl}/weather`, {
@@ -45,7 +45,7 @@ const useTaskStore = create((set, get) => ({
             const data = await response.json();
             console.log(data);
             set(produce((state) => {
-                const taskIndex = state.tasks.findIndex(t => t.taskId === task.taskId);
+                const taskIndex = state.tasks.findIndex(t => t.taskId === updateTask.taskId);
                 console.log(taskIndex);
                 if (data.suitable) {
                     state.tasks[taskIndex].state = 'ok';
