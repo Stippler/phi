@@ -43,10 +43,13 @@ const useTaskStore = create((set, get) => ({
             set(produce((state) => {
                 const taskIndex = state.tasks.findIndex(t => t.taskId === task.taskId);
                 console.log(taskIndex);
+                console.log(data.suitable)
                 if (data.suitable) {
+                    console.log('I am here')
                     state.tasks[taskIndex].state = 'ok';
                     state.tasks[taskIndex].reason = data.reason;
                 } else {
+                    console.log('Sadly I am here')
                     state.tasks[taskIndex].state = 'error';
                     state.tasks[taskIndex].reason = data.reason;
                 }
@@ -76,13 +79,15 @@ const useTaskStore = create((set, get) => ({
             console.log(response);
             const data = await response.json();
             console.log(data);
+            console.log(data.suitable)
             set(produce((state) => {
                 const taskIndex = state.tasks.findIndex(t => t.taskId === updateTask.taskId);
                 console.log(taskIndex);
+                console.log(data.suitable)
                 if (data.suitable) {
                     state.tasks[taskIndex].state = 'ok';
                     state.tasks[taskIndex].reason = data.reason;
-                } else {
+                } else { 
                     state.tasks[taskIndex].state = 'error';
                     state.tasks[taskIndex].reason = data.reason;
                 }
