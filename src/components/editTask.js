@@ -43,23 +43,23 @@ const EditTaskModal = ({ task, onSubmit, onClose }) => {
                         </div>
                         <div>
                             <label
-                                htmlFor="from"
+                                htmlFor="startTime"
                                 className="block text-gray-700 text-sm font-bold mb-2">
                                 From (Time)
                             </label>
-                            <input type="time" id="from" {...register("from", { required: true })}
+                            <input type="time" id="startTime" {...register("startTime", { required: true })}
                                 className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                            {errors.from && <span className="text-red-500 text-xs italic">From time is required.</span>}
+                            {errors.startTime && <span className="text-red-500 text-xs italic">From time is required.</span>}
                         </div>
                         <div>
                             <label
-                                htmlFor="to"
+                                htmlFor="endTime"
                                 className="block text-gray-700 text-sm font-bold mb-2">
                                 To (Time)
                             </label>
-                            <input type="time" id="to" {...register("to", { required: true })}
+                            <input type="time" id="endTime" {...register("endTime", { required: true })}
                                 className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-                            {errors.to && <span className="text-red-500 text-xs italic">To time is required.</span>}
+                            {errors.endTime && <span className="text-red-500 text-xs italic">End time is required.</span>}
                         </div>
                     </div>
 

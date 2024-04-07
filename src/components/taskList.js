@@ -12,12 +12,11 @@ function TaskList() {
 
     const onSubmit = (data) => {
         const updateData = {
-            ...task,
             ...data
         }
         console.log(updateData);
         updateTask(updateData);
-        onClose();
+        setIsModalOpen(false);
     };
 
     const openModal = (task) => {
@@ -49,7 +48,7 @@ function TaskList() {
                             <div className="flex-grow">
                                 <h3 className="text-l font-semibold">{task.title}</h3>
                                 <div className="flex items-center text-sm">
-                                    <p>{task.date} {task.from}-{task.to}</p>
+                                    <p>{task.date} {task.startTime}-{task.endTime}</p>
                                 </div>
                                 <p className="text-sm"><strong>Activity:</strong> {task.activity}</p>
                                 <p className="text-sm">{task.description}</p>
